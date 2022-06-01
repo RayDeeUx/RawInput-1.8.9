@@ -41,6 +41,7 @@ public class RawInput
     {
         // Abort mission if OS is not windows - Erymanthus / RayDeeUx
         if (Util.getOSType() != Util.EnumOS.WINDOWS) { MinecraftForge.EVENT_BUS.register(new UnintendedUsageWarnings()); return; }
+
         ClientCommandHandler.instance.registerCommand(new RescanCommand());
         Minecraft.getMinecraft().mouseHelper = new RawMouseHelper();
 
@@ -70,6 +71,7 @@ public class RawInput
                                         if (px < -eps || px > eps || py < -eps || py > eps) {
                                             mouse = (Mouse) controller;
                                             Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "[RawInput] Found mouse"));
+
                                         }
                                     }
                                 } catch (Exception e) {
