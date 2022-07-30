@@ -1,6 +1,6 @@
 package com.kuri0.rawinput;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.Util;
+
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -40,7 +40,7 @@ public class RawInput
     public void init(FMLInitializationEvent event)
     {
         // Abort mission if OS is not windows - Erymanthus / RayDeeUx
-        if (Util.getOSType() != Util.EnumOS.WINDOWS) { MinecraftForge.EVENT_BUS.register(new UnintendedUsageWarnings()); return; }
+        if (!(System.getProperty("os.name").contains("win"))) { MinecraftForge.EVENT_BUS.register(new UnintendedUsageWarnings()); return; }
 
         ClientCommandHandler.instance.registerCommand(new RescanCommand());
         Minecraft.getMinecraft().mouseHelper = new RawMouseHelper();
