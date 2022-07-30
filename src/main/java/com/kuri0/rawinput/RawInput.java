@@ -40,7 +40,7 @@ public class RawInput
     public void init(FMLInitializationEvent event)
     {
         // Abort mission if OS is not windows - Erymanthus / RayDeeUx
-        if (!(System.getProperty("os.name").contains("win"))) { MinecraftForge.EVENT_BUS.register(new UnintendedUsageWarnings()); return; }
+        if (!(System.getProperty("os.name").contains("Windows"))) { MinecraftForge.EVENT_BUS.register(new UnintendedUsageWarnings()); return; }
 
         ClientCommandHandler.instance.registerCommand(new RescanCommand());
         Minecraft.getMinecraft().mouseHelper = new RawMouseHelper();
