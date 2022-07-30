@@ -1,6 +1,6 @@
 package com.kuri0.rawinput;
 import net.minecraft.client.Minecraft;
-
+import net.minecraft.util.Util;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -8,6 +8,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+
 import java.lang.reflect.Constructor;
 
 import net.java.games.input.Controller;
@@ -18,12 +21,14 @@ import net.java.games.input.Mouse;
 public class RawInput
 {
     public static final String MODID = "rawinput";
-    public static final String VERSION = "1.1.2";
+    public static final String VERSION = "1.1.3";
 
     public static Mouse mouse;
     // Delta for mouse
     public static int dx = 0;
     public static int dy = 0;
+
+    private boolean hasSentWarningForSession = false;
 
     @SuppressWarnings("unchecked")
     private static ControllerEnvironment createDefaultEnvironment() throws ReflectiveOperationException {    // Find constructor (class is package private, so we can't access it directly)
@@ -40,7 +45,7 @@ public class RawInput
     public void init(FMLInitializationEvent event)
     {
         // Abort mission if OS is not windows - Erymanthus / RayDeeUx
-        if (!(System.getProperty("os.name").contains("Windows"))) { MinecraftForge.EVENT_BUS.register(new UnintendedUsageWarnings()); return; }
+        if (Util.getOSType() != Util.EnumOS.WINDOWS) { MinecraftForge.EVENT_BUS.register(new UnintendedUsageWarnings()); return; }
 
         ClientCommandHandler.instance.registerCommand(new RescanCommand());
         Minecraft.getMinecraft().mouseHelper = new RawMouseHelper();
@@ -80,7 +85,6 @@ public class RawInput
                                 }
                             }
                         } catch (Exception e) {
-                            // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
                     } else {
@@ -93,7 +97,6 @@ public class RawInput
                     try {
                         Thread.sleep(1);
                     } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 }
@@ -101,5 +104,13 @@ public class RawInput
         });
         inputThread.setName("inputThread");
         inputThread.start();
+    }
+
+    @SubscribeEvent
+    public void sendWarning(TickEvent.ClientTickEvent event){
+        if (hasSentWarningForSession || (Util.getOSType() == Util.EnumOS.WINDOWS) || Minecraft.getMinecraft().thePlayer == null) return;
+        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + "[RawInput] You are currently on " + System.getProperty("os.name") + ". RawInput is designed exclusively for Windows players, so if you feel that this message was a mistake, please screenshot this message and ping Erymanthus#5074 in the SkyClient Discord server: https://inv.wtf/skyclient"));
+        //prevent sending warning more than once per session
+        hasSentWarningForSession = true;
     }
 }
