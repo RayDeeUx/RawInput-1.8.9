@@ -21,7 +21,7 @@ import net.java.games.input.Mouse;
 public class RawInput
 {
     public static final String MODID = "rawinput";
-    public static final String VERSION = "1.1.3";
+    public static final String VERSION = "1.1.4";
 
     public static Mouse mouse;
     // Delta for mouse
@@ -45,7 +45,7 @@ public class RawInput
     public void init(FMLInitializationEvent event)
     {
         // Abort mission if OS is not windows - Erymanthus / RayDeeUx
-        if (Util.getOSType() != Util.EnumOS.WINDOWS) { MinecraftForge.EVENT_BUS.register(new UnintendedUsageWarnings()); return; }
+        if (Util.getOSType() != Util.EnumOS.WINDOWS) { MinecraftForge.EVENT_BUS.register(new UnintendedUsageWarnings()); ClientCommandHandler.instance.registerCommand(new OpenFileCommand()); return; }
 
         ClientCommandHandler.instance.registerCommand(new RescanCommand());
         Minecraft.getMinecraft().mouseHelper = new RawMouseHelper();
