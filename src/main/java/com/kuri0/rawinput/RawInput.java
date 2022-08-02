@@ -1,6 +1,6 @@
 package com.kuri0.rawinput;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.Util;
+
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -21,7 +21,7 @@ import net.java.games.input.Mouse;
 public class RawInput
 {
     public static final String MODID = "rawinput";
-    public static final String VERSION = "1.1.4";
+    public static final String VERSION = "1.1.5";
 
     public static Mouse mouse;
     // Delta for mouse
@@ -45,7 +45,7 @@ public class RawInput
     public void init(FMLInitializationEvent event)
     {
         // Abort mission if OS is not windows - Erymanthus / RayDeeUx
-        if (Util.getOSType() != Util.EnumOS.WINDOWS) { MinecraftForge.EVENT_BUS.register(new UnintendedUsageWarnings()); ClientCommandHandler.instance.registerCommand(new OpenFileCommand()); return; }
+        if (!(System.getProperty("os.name").toLowerCase().contains("windows"))) { MinecraftForge.EVENT_BUS.register(new UnintendedUsageWarnings()); ClientCommandHandler.instance.registerCommand(new OpenFileCommand()); return; }
 
         ClientCommandHandler.instance.registerCommand(new RescanCommand());
         Minecraft.getMinecraft().mouseHelper = new RawMouseHelper();
@@ -108,7 +108,7 @@ public class RawInput
 
     @SubscribeEvent
     public void sendWarning(TickEvent.ClientTickEvent event){
-        if (hasSentWarningForSession || (Util.getOSType() == Util.EnumOS.WINDOWS) || Minecraft.getMinecraft().thePlayer == null) return;
+        if (hasSentWarningForSession || (System.getProperty("os.name").toLowerCase().contains("windows")) || Minecraft.getMinecraft().thePlayer == null) return;
         Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + "[RawInput] You are currently on " + System.getProperty("os.name") + ". RawInput is designed exclusively for Windows players, so if you feel that this message was a mistake, please screenshot this message and ping Erymanthus#5074 in the SkyClient Discord server: https://inv.wtf/skyclient"));
         //prevent sending warning more than once per session
         hasSentWarningForSession = true;

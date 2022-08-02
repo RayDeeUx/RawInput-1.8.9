@@ -3,7 +3,7 @@ package com.kuri0.rawinput;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.Util;
+
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -28,7 +28,7 @@ public class UnintendedUsageWarnings {
 
     @SubscribeEvent
     public void sendWarning(TickEvent.ClientTickEvent event){
-        if (hasSentWarningForSession || (Util.getOSType() == Util.EnumOS.WINDOWS) || Minecraft.getMinecraft().thePlayer == null) return;
+        if (hasSentWarningForSession || (System.getProperty("os.name").toLowerCase().contains("windows")) || Minecraft.getMinecraft().thePlayer == null) return;
         if ((Loader.isModLoaded("skyclientcosmetics") || Loader.isModLoaded("skyblockclientupdater"))) warningMessagePrefix = "[RawInput] Hi there! This is another reminder that t";
         Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + warningMessagePrefix + warningMessage + " §ePlease run §l/modfolder§r§e to open it now."));
         Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "[RawInput] You are currently on " + System.getProperty("os.name") + ". If you feel that this message was a mistake, please screenshot this message and ping Erymanthus#5074 in the SkyClient Discord server: https://inv.wtf/skyclient"));
